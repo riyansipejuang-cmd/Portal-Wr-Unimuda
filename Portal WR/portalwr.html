@@ -840,7 +840,7 @@
     </footer>
 
     <script>
-     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvyhP2HDCtdCs1eR8qPETEuBdlAkQ42wW7zW2QrVgbEfzz3NUBy86DwIfUPxOF_oOSew/exec";
+     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqQ70HU3DjizJ9X7ObVSNB-Fje1BlcDg1hhNVXgJSuwMI11vG7WB3-TYTKLks1JMHseg/exec";
         let selectedWR = "";
         let semuaDataFasilitas = [];
         let dataTersaring = [];
@@ -1054,27 +1054,27 @@
 		halamanAktif = 1;
 		tampilkanTabel();
 	}
+		function formatTanggalIndo(dateString) {
+			if (!dateString) return '-';
+			// Ambil bagian tanggal saja (jika ada format timestamp/T)
+			let cleanDate = dateString.split('T')[0];
+			let parts = cleanDate.split('-');
+			if (parts.length !== 3) return dateString;
 
-        function formatTanggalIndo(dateString) {
-            if (!dateString) return '-';
-            let cleanDate = dateString.split('T')[0];
-            let parts = cleanDate.split('-');
-            if (parts.length !== 3) return dateString;
+			let tahun = parts[0];
+			let bulanAngka = parseInt(parts[1], 10);
+			let tanggal = parseInt(parts[2], 10);
 
-            let tahun = parts[0];
-            let bulanAngka = parseInt(parts[1], 10);
-            let tanggal = parseInt(parts[2], 10);
+			const namaBulan = [
+				"", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+				"Juli", "Agustus", "September", "Oktober", "November", "Desember"
+			];
 
-            const namaBulan = [
-                "", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-            ];
-
-            if (bulanAngka >= 1 && bulanAngka <= 12) {
-                return `${tanggal} ${namaBulan[bulanAngka]} ${tahun}`;
-            }
-            return cleanDate;
-        }
+			if (bulanAngka >= 1 && bulanAngka <= 12) {
+				return `${tanggal} ${namaBulan[bulanAngka]} ${tahun}`;
+			}
+			return cleanDate;
+		}
 
         function tampilkanTabel() {
             const tbody = document.getElementById('tableBody');
