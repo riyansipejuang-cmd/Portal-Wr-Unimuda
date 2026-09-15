@@ -839,7 +839,7 @@
     </footer>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfMJJmBw42bLlUSWnnLhlYNjVjkmYPYlaAqfeE5JXrgc-KI0a6XFRA1dpLM6uPFoFy5A/exec"; // Ganti dengan URL Google Apps Script Anda
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1it-foOySdTl75DkXRAAXzxewvHv8U9jRgSrnUVJ7v9Jl2Vrs0vDawkNnGZDy0yhElQ/exec"; // Ganti dengan URL Google Apps Script Anda
         let selectedWR = "";
         let semuaDataFasilitas = [];
         let dataTersaring = [];
@@ -1038,9 +1038,10 @@
                 return matchKeyword && matchWR;
             });
 
+            // Urutkan berdasarkan tglMulai dari yang terbaru secara presisi
             dataTersaring.sort((a, b) => {
-                let dateA = a.tglMulai ? new Date(a.tglMulai + "T00:00:00") : new Date(0);
-                let dateB = b.tglMulai ? new Date(b.tglMulai + "T00:00:00") : new Date(0);
+                let dateA = a.tglMulai ? new Date(a.tglMulai.trim() + "T00:00:00") : new Date(0);
+                let dateB = b.tglMulai ? new Date(b.tglMulai.trim() + "T00:00:00") : new Date(0);
                 return dateB - dateA; 
             });
 
@@ -1050,9 +1051,9 @@
 
         function formatTanggalIndo(dateString) {
             if (!dateString) return '-';
-            let cleanDate = dateString.split('T')[0];
+            let cleanDate = dateString.split('T')[0].trim();
             let parts = cleanDate.split('-');
-            if (parts.length !== 3) return dateString;
+            if (parts.length !== 3) return cleanDate;
 
             let tahun = parts[0];
             let bulanAngka = parseInt(parts[1], 10);
