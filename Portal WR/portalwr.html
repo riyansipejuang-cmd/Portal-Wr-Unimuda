@@ -510,7 +510,6 @@
         tr:nth-child(even) { background-color: var(--bg-main); }
         tr:hover { background-color: #f1f5f9; }
 
-        /* Style untuk membatasi deskripsi agar tidak melebar */
         .deskripsi-tabel {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -813,7 +812,7 @@
                         <th>Durasi Tanggal</th>
                         <th>Bidang Utama</th>
                         <th>Status & Berkas</th>
-						<th>Keterangan</th>
+                        <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -840,7 +839,7 @@
     </footer>
 
     <script>
-     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf6Q5luM7w-PcfOp7kkFqMH6WXYSnQi7Kkdr7uKfbMswziFuIIKZY7xeKmAI3OA4HCoQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfMJJmBw42bLlUSWnnLhlYNjVjkmYPYlaAqfeE5JXrgc-KI0a6XFRA1dpLM6uPFoFy5A/exec"; // Ganti dengan URL Google Apps Script Anda
         let selectedWR = "";
         let semuaDataFasilitas = [];
         let dataTersaring = [];
@@ -862,7 +861,7 @@
             document.getElementById(pageId).classList.add('active-page');
             document.querySelectorAll('.navbar nav a').forEach(a => a.classList.remove('active-nav'));
             if(pageId === 'profil-page') document.getElementById('nav-profil').classList.add('active-nav');
-            if(pageId === 'form-page') document.getElementById('nav-form').classList.add('active-nav');				
+            if(pageId === 'form-page') document.getElementById('nav-form').classList.add('active-nav');                
             if(pageId === 'status-page') document.getElementById('nav-status').classList.add('active-nav');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1016,7 +1015,7 @@
 
         function loadDaftarAcc() {
             const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Memuat data status...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Memuat data status...</td></tr>`;
 
             fetch(SCRIPT_URL + "?t=" + new Date().getTime())
             .then(response => response.json())
@@ -1025,52 +1024,50 @@
                 filterData();
             })
             .catch(error => {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #dc2626;">Gagal memuat data dari server.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #dc2626;">Gagal memuat data dari server.</td></tr>`;
             });
         }
 
         function filterData() {
-			const keyword = document.getElementById('searchInput').value.toLowerCase();
-			const selectedFilterWR = document.getElementById('filterWR').value;
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const selectedFilterWR = document.getElementById('filterWR').value;
 
-			dataTersaring = semuaDataFasilitas.filter(item => {
-				const matchKeyword = keyword === "" || (item.nama && item.nama.toLowerCase().includes(keyword));
-				const matchWR = selectedFilterWR === "" || (item.bidangWR && item.bidangWR.toLowerCase() === selectedFilterWR.toLowerCase());
-				return matchKeyword && matchWR;
-			});
+            dataTersaring = semuaDataFasilitas.filter(item => {
+                const matchKeyword = keyword === "" || (item.nama && item.nama.toLowerCase().includes(keyword));
+                const matchWR = selectedFilterWR === "" || (item.bidangWR && item.bidangWR.toLowerCase() === selectedFilterWR.toLowerCase());
+                return matchKeyword && matchWR;
+            });
 
-			// Mengurutkan dari tanggal yang paling baru/mendatang ke yang lama (Descending)
-			dataTersaring.sort((a, b) => {
-				let dateA = a.tglMulai ? new Date(a.tglMulai + "T00:00:00") : new Date(0);
-				let dateB = b.tglMulai ? new Date(b.tglMulai + "T00:00:00") : new Date(0);
-				return dateB - dateA; // Terbaru berada di urutan paling atas
-			});
+            dataTersaring.sort((a, b) => {
+                let dateA = a.tglMulai ? new Date(a.tglMulai + "T00:00:00") : new Date(0);
+                let dateB = b.tglMulai ? new Date(b.tglMulai + "T00:00:00") : new Date(0);
+                return dateB - dateA; 
+            });
 
-			halamanAktif = 1;
-			tampilkanTabel();
-		}
+            halamanAktif = 1;
+            tampilkanTabel();
+        }
 
-		function formatTanggalIndo(dateString) {
-			if (!dateString) return '-';
-			// Ambil bagian tanggal saja (jika ada format timestamp/T)
-			let cleanDate = dateString.split('T')[0];
-			let parts = cleanDate.split('-');
-			if (parts.length !== 3) return dateString;
+        function formatTanggalIndo(dateString) {
+            if (!dateString) return '-';
+            let cleanDate = dateString.split('T')[0];
+            let parts = cleanDate.split('-');
+            if (parts.length !== 3) return dateString;
 
-			let tahun = parts[0];
-			let bulanAngka = parseInt(parts[1], 10);
-			let tanggal = parseInt(parts[2], 10);
+            let tahun = parts[0];
+            let bulanAngka = parseInt(parts[1], 10);
+            let tanggal = parseInt(parts[2], 10);
 
-			const namaBulan = [
-				"", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-				"Juli", "Agustus", "September", "Oktober", "November", "Desember"
-			];
+            const namaBulan = [
+                "", "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
 
-			if (bulanAngka >= 1 && bulanAngka <= 12) {
-				return `${tanggal} ${namaBulan[bulanAngka]} ${tahun}`;
-			}
-			return cleanDate;
-		}
+            if (bulanAngka >= 1 && bulanAngka <= 12) {
+                return `${tanggal} ${namaBulan[bulanAngka]} ${tahun}`;
+            }
+            return cleanDate;
+        }
 
         function tampilkanTabel() {
             const tbody = document.getElementById('tableBody');
@@ -1081,7 +1078,7 @@
             tbody.innerHTML = "";
 
             if(dataTersaring.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Tidak ada data pengajuan ditemukan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Tidak ada data pengajuan ditemukan.</td></tr>`;
                 pageInfo.innerText = "Menampilkan 0 dari 0 data";
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
