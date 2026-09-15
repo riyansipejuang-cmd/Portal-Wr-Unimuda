@@ -840,7 +840,7 @@
     </footer>
 
     <script>
-     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqQ70HU3DjizJ9X7ObVSNB-Fje1BlcDg1hhNVXgJSuwMI11vG7WB3-TYTKLks1JMHseg/exec";
+     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf6Q5luM7w-PcfOp7kkFqMH6WXYSnQi7Kkdr7uKfbMswziFuIIKZY7xeKmAI3OA4HCoQ/exec";
         let selectedWR = "";
         let semuaDataFasilitas = [];
         let dataTersaring = [];
@@ -1039,21 +1039,17 @@
 				return matchKeyword && matchWR;
 			});
 
-			// --- TAMBAHAN KODE UNTUK MENGURUTKAN TANGGAL ---
+			// Mengurutkan dari tanggal yang paling baru/mendatang ke yang lama (Descending)
 			dataTersaring.sort((a, b) => {
-				// Mengubah string tanggal menjadi objek waktu (Date) untuk dibandingkan
-				let dateA = a.tglMulai ? new Date(a.tglMulai) : new Date(0);
-				let dateB = b.tglMulai ? new Date(b.tglMulai) : new Date(0);
-        
-				// Urutkan dari tanggal yang paling dekat/terbaru (Ascending)
-				// Jika ingin dibalik dari yang paling jauh, tukar dateA dan dateB
-			return dateA - dateB; 
-		});
-		// ----------------------------------------------
+				let dateA = a.tglMulai ? new Date(a.tglMulai + "T00:00:00") : new Date(0);
+				let dateB = b.tglMulai ? new Date(b.tglMulai + "T00:00:00") : new Date(0);
+				return dateB - dateA; // Terbaru berada di urutan paling atas
+			});
 
-		halamanAktif = 1;
-		tampilkanTabel();
-	}
+			halamanAktif = 1;
+			tampilkanTabel();
+		}
+
 		function formatTanggalIndo(dateString) {
 			if (!dateString) return '-';
 			// Ambil bagian tanggal saja (jika ada format timestamp/T)
